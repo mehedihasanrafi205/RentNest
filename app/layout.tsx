@@ -1,17 +1,11 @@
 import { Geist, Geist_Mono } from "next/font/google"
-
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
-import Footer from "@/components/shared/Footer"
-import Navbar from "@/components/shared/Navbar"
+import { Toaster } from "sonner"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
-
-const fontMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-})
+const fontMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
 export default function RootLayout({
   children,
@@ -29,11 +23,9 @@ export default function RootLayout({
         geist.variable
       )}
     >
-      <body className="flex min-h-screen flex-col">
-        <ThemeProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+      <body>
+        <ThemeProvider>{children}
+          <Toaster position="top-right" richColors />
         </ThemeProvider>
       </body>
     </html>
