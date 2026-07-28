@@ -183,7 +183,7 @@ export default function Navbar() {
                     >
                       {mockUser.name[0]}
                     </span>
-                    <span className="max-w-[100px] truncate">{mockUser.name}</span>
+                    <span className="max-w-25 truncate">{mockUser.name}</span>
                     <ChevronDown
                       size={14}
                       className={`transition-transform duration-200 ${userMenuOpen ? "rotate-180" : ""}`}
