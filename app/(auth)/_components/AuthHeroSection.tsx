@@ -2,11 +2,17 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Building2, ShieldCheck, Zap } from 'lucide-react';
+import { Building2, ShieldCheck, Zap, type LucideIcon } from 'lucide-react';
 
 interface HeroSectionProps {
   title?: string;
   description?: string;
+}
+
+interface Feature {
+  icon: LucideIcon;
+  title: string;
+  description: string;
 }
 
 function RentNestLogo({ className = "" }: { className?: string }) {
@@ -30,7 +36,7 @@ function RentNestLogo({ className = "" }: { className?: string }) {
   );
 }
 
-const features = [
+const features: Feature[] = [
   {
     icon: Zap,
     title: 'Quick & Smart Search',

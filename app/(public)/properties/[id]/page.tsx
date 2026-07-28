@@ -1,8 +1,14 @@
 import React from 'react'
 
-const IndividualHousePage = () => {
+interface PropertyDetailPageProps {
+  params: Promise<{ id: string }>
+}
+
+const IndividualHousePage = async ({ params }: PropertyDetailPageProps) => {
+  const { id } = await params
+
   return (
-    <div>IndividualHousePage</div>
+    <div>IndividualHousePage — {id}</div>
   )
 }
 
