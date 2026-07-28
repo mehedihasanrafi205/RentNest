@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import {
   Sun,
   Moon,
@@ -14,13 +15,28 @@ import {
   Info,
   LogIn,
   UserPlus,
-  ChevronDown,
   LayoutDashboard,
   LogOut,
   User,
 } from "lucide-react";
 
-/* ─── Logo: real SVG file + wordmark ─── */
+import type { IUser } from "@/types";
+import { getMe } from "@/service/getme";
+import { logoutAction } from "@/app/(auth)/_action/auth";
+
+// Shadcn UI Imports
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 function RentNestLogo({ className = "" }: { className?: string }) {
   return (
     <span className={`flex items-end gap-2 ${className}`}>
@@ -49,19 +65,30 @@ const NAV_LINKS = [
   { label: "About", href: "/about", icon: Info },
 ];
 
-/* ─── Fake auth state (replace with real session later) ─── */
-// const mockUser = null;          // logged out
-// const mockUser = { name: "Rahim", role: "tenant" };
-// const mockUser = { name: "Karim Landlord", role: "landlord" };
-// const mockUser = { name: "Admin", role: "admin" };
-const mockUser: { name: string; role: string } | null = null;
-
-/* ─────────────────────────────────────────────── */
 export default function Navbar() {
-  const { resolvedTheme, setTheme } = useTheme(); // resolvedTheme used in toggleTheme
+  const router = useRouter();
+  const pathname = usePathname();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [user, setUser] = useState<IUser | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  /* Fetch Logged-in User Info */
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const currentUser = await getMe();
+        setUser(currentUser);
+      } catch {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [pathname]);
 
   /* navbar shadow on scroll */
   useEffect(() => {
@@ -81,6 +108,30 @@ export default function Navbar() {
 
   const toggleTheme = () =>
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
+
+  const handleLogout = async () => {
+    await logoutAction();
+    setUser(null);
+    setMobileOpen(false);
+    router.push("/login");
+    router.refresh();
+  };
+
+  // Dynamic user menu items array based on user role
+  const userMenuGroups = [
+    [
+      {
+        label: "Dashboard",
+        href: `/dashboard/${user?.role?.toLowerCase() || "user"}`,
+        icon: LayoutDashboard,
+      },
+      {
+        label: "Profile",
+        href: "/profile",
+        icon: User,
+      },
+    ],
+  ];
 
   return (
     <>
@@ -122,7 +173,6 @@ export default function Navbar() {
                   >
                     <Icon size={15} className="shrink-0" />
                     {label}
-                    {/* underline accent */}
                     <span
                       className="
                         absolute bottom-0 left-3 right-3 h-0.5 rounded-full
@@ -148,7 +198,6 @@ export default function Navbar() {
                   border border-transparent hover:border-border
                 "
               >
-                {/* Show both icons; CSS dark: class hides/shows the right one */}
                 <Sun
                   size={18}
                   className="hidden dark:block"
@@ -162,115 +211,85 @@ export default function Navbar() {
               </button>
 
               {/* Auth section */}
-              {mockUser ? (
-                /* ── Logged-in user menu ── */
-                <div className="relative hidden md:block">
-                  <button
-                    id="navbar-user-menu-btn"
-                    onClick={() => setUserMenuOpen((v) => !v)}
-                    className="
-                      flex items-center gap-2 px-3 py-1.5 rounded-lg
-                      border border-border hover:border-primary/50
-                      text-sm font-medium transition-all duration-200
-                      hover:bg-primary/8
-                    "
-                  >
-                    <span
-                      className="
-                        flex items-center justify-center w-7 h-7 rounded-full
-                        bg-primary text-primary-foreground text-xs font-bold
-                      "
-                    >
-                      {mockUser.name[0]}
-                    </span>
-                    <span className="max-w-25 truncate">{mockUser.name}</span>
-                    <ChevronDown
-                      size={14}
-                      className={`transition-transform duration-200 ${userMenuOpen ? "rotate-180" : ""}`}
-                    />
-                  </button>
+              {loading ? (
+                <div className="h-9 w-9 bg-muted/50 animate-pulse rounded-full hidden md:block" />
+              ) : user ? (
+                /* ── Logged-in Avatar Dropdown (Shadcn UI) ── */
+                <div className="hidden md:block">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className="relative size-9 rounded-full p-0 cursor-pointer"
+                      >
+                        <Avatar className="size-9">
+                          <AvatarImage src={user?.image || ""} alt={user.name} />
+                          <AvatarFallback className="bg-[#00a17f] text-white font-bold">
+                            {user.name ? user.name[0].toUpperCase() : "U"}
+                          </AvatarFallback>
+                        </Avatar>
+                      </Button>
+                    </DropdownMenuTrigger>
 
-                  {/* dropdown */}
-                  {userMenuOpen && (
-                    <div
-                      className="
-                        absolute right-0 top-full mt-2 w-52
-                        bg-popover border border-border rounded-xl shadow-xl shadow-black/10
-                        py-1.5 z-50
-                        animate-in fade-in slide-in-from-top-2 duration-150
-                      "
-                    >
-                      <div className="px-3 py-2 border-b border-border mb-1">
-                        <p className="text-xs text-muted-foreground">Signed in as</p>
-                        <p className="text-sm font-semibold truncate">{mockUser.name}</p>
-                        <span
-                          className="
-                            inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-medium
-                            bg-primary/15 text-primary capitalize
-                          "
-                        >
-                          {mockUser.role}
-                        </span>
-                      </div>
-                      <Link
-                        href={`/dashboard/${mockUser.role}`}
-                        className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-primary/8 transition-colors"
-                        onClick={() => setUserMenuOpen(false)}
+                    <DropdownMenuContent align="end" className="w-56">
+                      <DropdownMenuGroup>
+                        <DropdownMenuLabel>
+                          <div className="flex flex-col gap-0.5">
+                            <span className="text-sm font-medium text-foreground truncate">
+                              {user.name}
+                            </span>
+                            <span className="text-xs font-normal text-muted-foreground truncate">
+                              {user.email}
+                            </span>
+                          </div>
+                        </DropdownMenuLabel>
+                      </DropdownMenuGroup>
+
+                      <DropdownMenuSeparator />
+
+                      {userMenuGroups.map((group, groupIndex) => (
+                        <div key={groupIndex}>
+                          <DropdownMenuGroup>
+                            {group.map((item) => (
+                              <DropdownMenuItem key={item.label} asChild>
+                                <Link href={item.href} className="flex items-center gap-2 cursor-pointer">
+                                  <item.icon className="size-4 text-muted-foreground" />
+                                  <span>{item.label}</span>
+                                </Link>
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuGroup>
+                          <DropdownMenuSeparator />
+                        </div>
+                      ))}
+
+                      <DropdownMenuItem
+                        className="text-destructive focus:text-destructive cursor-pointer flex items-center gap-2"
+                        onClick={handleLogout}
                       >
-                        <LayoutDashboard size={15} />
-                        Dashboard
-                      </Link>
-                      <Link
-                        href="/profile"
-                        className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-primary/8 transition-colors"
-                        onClick={() => setUserMenuOpen(false)}
-                      >
-                        <User size={15} />
-                        Profile
-                      </Link>
-                      <hr className="border-border my-1" />
-                      <button
-                        className="flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/8 transition-colors w-full"
-                        onClick={() => {
-                          setUserMenuOpen(false);
-                          /* call signOut here */
-                        }}
-                      >
-                        <LogOut size={15} />
-                        Sign Out
-                      </button>
-                    </div>
-                  )}
+                        <LogOut className="size-4" />
+                        <span>Log out</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               ) : (
-                /* ── Guest buttons ── */
+                /* ── Guest Login/Register buttons ── */
                 <div className="hidden md:flex items-center gap-2">
-                  <Link
-                    id="navbar-login-btn"
-                    href="/login"
-                    className="
-                      flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium
-                      text-foreground border border-border
-                      hover:border-primary/60 hover:bg-primary/8
-                      transition-all duration-200
-                    "
-                  >
-                    <LogIn size={15} />
-                    Login
+                  <Link href="/login">
+                    <Button variant="outline" size="sm" className="cursor-pointer">
+                      <LogIn size={15} className="mr-1.5" />
+                      Login
+                    </Button>
                   </Link>
-                  <Link
-                    id="navbar-register-btn"
-                    href="/register"
-                    className="
-                      flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium
-                      bg-primary text-primary-foreground
-                      hover:bg-primary/90 hover:shadow-md hover:shadow-primary/25
-                      transition-all duration-200
-                      active:scale-95
-                    "
-                  >
-                    <UserPlus size={15} />
-                    Register
+                  <Link href="/register">
+                    <Button
+                      size="sm"
+                      className="bg-[#00a17f] hover:bg-[#00876a] text-white cursor-pointer"
+                    >
+                      <UserPlus size={15} className="mr-1.5" />
+                      Register
+                    </Button>
                   </Link>
                 </div>
               )}
@@ -320,23 +339,33 @@ export default function Navbar() {
 
             <hr className="border-border my-2" />
 
-            {/* Auth mobile */}
-            {mockUser ? (
+            {/* Auth section for Mobile */}
+            {user ? (
               <>
+                <div className="px-4 py-2 bg-muted/40 rounded-xl mb-1">
+                  <p className="text-xs text-muted-foreground">Signed in as</p>
+                  <p className="text-sm font-semibold">{user.name}</p>
+                  <p className="text-xs text-muted-foreground">{user.email}</p>
+                </div>
                 <Link
-                  href={`/dashboard/${mockUser.role}`}
+                  href={`/dashboard/${user.role?.toLowerCase() || "user"}`}
                   onClick={() => setMobileOpen(false)}
                   className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary/8 transition-colors"
                 >
                   <LayoutDashboard size={17} className="text-primary" />
                   Dashboard
                 </Link>
+                <Link
+                  href="/profile"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary/8 transition-colors"
+                >
+                  <User size={17} className="text-primary" />
+                  Profile
+                </Link>
                 <button
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/8 transition-colors w-full"
-                  onClick={() => {
-                    setMobileOpen(false);
-                    /* call signOut here */
-                  }}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/8 transition-colors w-full text-left"
+                  onClick={handleLogout}
                 >
                   <LogOut size={17} />
                   Sign Out
@@ -361,8 +390,7 @@ export default function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className="
                     flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium
-                    bg-primary text-primary-foreground
-                    hover:bg-primary/90 transition-all duration-200
+                    bg-[#00a17f] text-white hover:bg-[#00876a] transition-all duration-200
                   "
                 >
                   <UserPlus size={17} />
@@ -376,14 +404,6 @@ export default function Navbar() {
 
       {/* Spacer so content doesn't hide under fixed navbar */}
       <div className="h-16" aria-hidden="true" />
-
-      {/* Click-outside overlay for user dropdown */}
-      {userMenuOpen && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => setUserMenuOpen(false)}
-        />
-      )}
     </>
   );
 }

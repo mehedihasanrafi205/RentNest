@@ -18,6 +18,7 @@ export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
 // USER
 
 export interface IUser {
+  image: string;
   id: string;
   name: string;
   email: string;
