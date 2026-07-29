@@ -12,23 +12,27 @@ import {
   Mail,
   ChevronRight,
 } from "lucide-react"
+import { motion } from "framer-motion"
 
 // Types
 interface StatCardProps {
   number: string
   label: string
+  index: number
 }
 
 interface FeatureCardProps {
   icon: React.ReactNode
   title: string
   description: string
+  index: number
 }
 
 interface TeamMemberProps {
   name: string
   role: string
   image: string
+  index: number
 }
 
 export default function AboutPage(): JSX.Element {
@@ -52,26 +56,45 @@ export default function AboutPage(): JSX.Element {
               <span className="inline-block rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-semibold tracking-wider text-primary uppercase">
                 Our Vision
               </span>
-              <h1 className="text-4xl leading-[1.15] font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-                Redefining the Way You{" "}
-                <span className="text-primary">Find Home</span>
-              </h1>
-              <p className="mx-auto max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg lg:mx-0">
-                RentNest is built on reliability and transparency. We’ve
-                eliminated the friction of property rentals for both tenants and
-                landlords through modern digital precision.
-              </p>
-              <div className="flex flex-col justify-center gap-4 pt-2 sm:flex-row lg:justify-start">
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-4xl leading-[1.15] font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+              >
+                Bangladesh&apos;s Most Trusted{" "}
+                <span className="text-primary">Rental Marketplace</span>
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="mx-auto max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg lg:mx-0"
+              >
+                RentNest is Bangladesh&apos;s most trusted rental marketplace. Find your perfect home or list your
+                property with ease.
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="flex flex-col justify-center gap-4 pt-2 sm:flex-row lg:justify-start"
+              >
                 <button className="flex items-center justify-center gap-2 rounded-2xl bg-primary px-8 py-4 font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 active:scale-95">
                   Get Started <ChevronRight size={18} />
                 </button>
                 <button className="rounded-2xl border border-border bg-secondary px-8 py-4 font-semibold text-secondary-foreground transition-all hover:bg-secondary/80">
                   Learn More
                 </button>
-              </div>
+              </motion.div>
             </div>
 
-            <div className="group relative">
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="group relative"
+            >
               <div className="absolute -inset-1 rounded-[32px] bg-linear-to-r from-primary to-accent opacity-30 blur transition duration-1000 group-hover:opacity-50"></div>
               <div className="group relative h-96 overflow-hidden rounded-[30px] border border-border bg-card shadow-2xl sm:h-[480px]">
                 <Image
@@ -83,22 +106,28 @@ export default function AboutPage(): JSX.Element {
                   priority
                 />
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* Stats Section */}
         <section className="my-12 border-y border-border bg-muted/50 px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 md:grid-cols-3">
-            <StatCard number="10,000+" label="Happy Tenants" />
-            <StatCard number="5,000+" label="Verified Listings" />
-            <StatCard number="98%" label="Satisfaction Rate" />
+            <StatCard number="10,000+" label="Happy Tenants" index={0} />
+            <StatCard number="5,000+" label="Verified Listings" index={1} />
+            <StatCard number="64" label="Districts Covered" index={2} />
           </div>
         </section>
 
         {/* Core Values / Mission */}
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <div className="mx-auto mb-16 max-w-2xl text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mx-auto mb-16 max-w-2xl text-center"
+          >
             <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
               A Mission Driven by Trust
             </h2>
@@ -106,23 +135,26 @@ export default function AboutPage(): JSX.Element {
               We provide the framework for high-stakes decision making, ensuring
               every interaction is professional, secure, and simple.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             <FeatureCard
               icon={<ShieldCheck className="h-6 w-6" />}
               title="Trust & Transparency"
               description="Every property and user is verified to maintain a safe and reliable marketplace for everyone involved."
+              index={0}
             />
             <FeatureCard
               icon={<Building2 className="h-6 w-6" />}
               title="Verified Properties"
               description="Our property photography is verified, backed by data accuracy and rigorous on-site inspection standards."
+              index={1}
             />
             <FeatureCard
               icon={<Rocket className="h-6 w-6" />}
               title="Effortless Management"
               description="From automated rent payments to instant landlord communication, we simplify your entire home journey."
+              index={2}
             />
           </div>
         </section>
@@ -130,9 +162,15 @@ export default function AboutPage(): JSX.Element {
         {/* How It Works */}
         <section className="border-y border-border bg-muted/30 px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
-            <h2 className="mb-16 text-center text-3xl font-bold text-foreground sm:text-4xl">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="mb-16 text-center text-3xl font-bold text-foreground sm:text-4xl"
+            >
               How RentNest Works
-            </h2>
+            </motion.h2>
 
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
               {/* Tenants Column */}
@@ -200,7 +238,13 @@ export default function AboutPage(): JSX.Element {
 
         {/* Team Section */}
         <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="mx-auto mb-16 max-w-2xl text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mx-auto mb-16 max-w-2xl text-center"
+          >
             <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
               The Team Behind RentNest
             </h2>
@@ -208,42 +252,52 @@ export default function AboutPage(): JSX.Element {
               Meet the dedicated team members working hard to make renting a
               better experience for everyone.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <TeamMember
               name="Elena Vance"
               role="Founder & CEO"
               image="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80"
+              index={0}
             />
             <TeamMember
               name="Marcus Thorne"
               role="Head of Product"
               image="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80"
+              index={1}
             />
             <TeamMember
               name="Sofia Chen"
               role="Creative Director"
               image="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80"
+              index={2}
             />
             <TeamMember
               name="David Miller"
               role="CTO"
               image="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80"
+              index={3}
             />
           </div>
         </section>
 
         {/* CTA Section */}
         <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-linear-to-r from-primary to-primary/80 p-10 text-center text-primary-foreground shadow-xl sm:p-16">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="relative overflow-hidden rounded-3xl border border-primary/20 bg-linear-to-r from-primary to-primary/80 p-10 text-center text-primary-foreground shadow-xl sm:p-16"
+          >
             <div className="relative z-10 mx-auto max-w-2xl space-y-6">
               <h2 className="text-3xl font-extrabold tracking-tight sm:text-5xl">
                 Ready to Find Your Next Home?
               </h2>
               <p className="text-base opacity-90 sm:text-lg">
-                Join thousands of happy tenants and landlords today on the most
-                trusted property rental platform.
+                Join thousands of happy tenants and landlords across Bangladesh
+                on the most trusted property rental platform.
               </p>
               <div className="flex flex-col justify-center gap-4 pt-4 sm:flex-row">
                 <button className="rounded-2xl bg-background px-8 py-4 font-bold text-foreground shadow-md transition-all hover:bg-background/90 active:scale-95">
@@ -254,7 +308,7 @@ export default function AboutPage(): JSX.Element {
                 </button>
               </div>
             </div>
-          </div>
+          </motion.div>
         </section>
       </main>
     </div>
@@ -262,16 +316,22 @@ export default function AboutPage(): JSX.Element {
 }
 
 // Subcomponents
-function StatCard({ number, label }: StatCardProps): JSX.Element {
+function StatCard({ number, label, index }: StatCardProps): JSX.Element {
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 text-center shadow-sm">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="rounded-2xl border border-border bg-card p-6 text-center shadow-sm"
+    >
       <div className="mb-2 text-4xl font-extrabold text-primary sm:text-5xl">
         {number}
       </div>
       <div className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
         {label}
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -279,9 +339,16 @@ function FeatureCard({
   icon,
   title,
   description,
+  index,
 }: FeatureCardProps): JSX.Element {
   return (
-    <div className="rounded-3xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:border-primary/50 hover:shadow-md">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="rounded-3xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:border-primary/50 hover:shadow-md"
+    >
       <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary">
         {icon}
       </div>
@@ -289,7 +356,7 @@ function FeatureCard({
       <p className="text-sm leading-relaxed text-muted-foreground">
         {description}
       </p>
-    </div>
+    </motion.div>
   )
 }
 
@@ -313,9 +380,15 @@ function StepItem({
   )
 }
 
-function TeamMember({ name, role, image }: TeamMemberProps): JSX.Element {
+function TeamMember({ name, role, image, index }: TeamMemberProps): JSX.Element {
   return (
-    <div className="group overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all hover:border-primary/50 hover:shadow-md">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: index * 0.1 }}
+      className="group overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all hover:border-primary/50 hover:shadow-md"
+    >
       <div className="h-64 overflow-hidden">
         <div className="relative h-full w-full overflow-hidden">
           <Image
@@ -339,6 +412,6 @@ function TeamMember({ name, role, image }: TeamMemberProps): JSX.Element {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }

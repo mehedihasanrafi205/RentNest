@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { motion } from "framer-motion"
 
 export function HeroSection() {
   const [location, setLocation] = useState("")
@@ -37,15 +38,28 @@ export function HeroSection() {
 
       {/* Main Content */}
       <div className="relative z-10 mx-auto w-full max-w-5xl px-4 text-center">
-        <h1 className="mb-4 text-3xl leading-tight font-extrabold tracking-tight text-white drop-shadow-sm sm:text-5xl md:text-6xl">
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-4 text-3xl leading-tight font-extrabold tracking-tight text-white drop-shadow-sm sm:text-5xl md:text-6xl"
+        >
           Find Your Next Dream Home Effortlessly
-        </h1>
-        <p className="mx-auto mb-8 max-w-2xl text-base leading-relaxed font-normal text-white/90 sm:text-lg md:text-xl">
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="mx-auto mb-8 max-w-2xl text-base leading-relaxed font-normal text-white/90 sm:text-lg md:text-xl"
+        >
           Discover the perfect rental with verified listings and secure booking.
-        </p>
+        </motion.p>
 
         {/* Search Bar Container */}
-        <form
+        <motion.form
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
           onSubmit={handleSearch}
           className="mx-auto flex w-full max-w-4xl flex-col items-center gap-2 rounded-2xl border border-border/80 bg-card/95 p-2 text-card-foreground shadow-2xl backdrop-blur-md transition-all duration-200 md:flex-row md:rounded-full"
         >
@@ -118,7 +132,7 @@ export function HeroSection() {
             <Search className="h-4 w-4" />
             <span>Search</span>
           </Button>
-        </form>
+        </motion.form>
       </div>
     </section>
   )

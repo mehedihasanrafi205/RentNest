@@ -99,9 +99,9 @@ export default function ContactPage() {
               We&apos;d Love to Hear From You
             </h1>
             <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-              Whether you&apos;re looking for your dream home or have questions about
-              listing your property, our team is here to help you every step of
-              the way.
+              Whether you&apos;re looking for your dream home in Bangladesh or have
+              questions about listing your property, our team is here to help
+              you every step of the way.
             </p>
           </div>
         </section>
@@ -235,7 +235,7 @@ export default function ContactPage() {
                     Office Address
                   </h3>
                   <p className="text-base font-medium text-foreground">
-                    123 RentNest Way, New York, NY 10001
+                    Dhaka, Bangladesh
                   </p>
                 </div>
               </div>
@@ -249,7 +249,7 @@ export default function ContactPage() {
                     Phone Number
                   </h3>
                   <p className="text-base font-medium text-foreground">
-                    +1 (212) 555-0198
+                    +880 1700-000000
                   </p>
                 </div>
               </div>
@@ -277,7 +277,7 @@ export default function ContactPage() {
                     Operating Hours
                   </h3>
                   <p className="text-base font-medium text-foreground">
-                    Mon-Fri, 9 AM - 6 PM
+                    Sat–Thu, 9 AM – 6 PM (BST)
                   </p>
                 </div>
               </div>
@@ -292,7 +292,7 @@ export default function ContactPage() {
                 />
                 <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 to-transparent p-6">
                   <span className="text-sm font-semibold text-white">
-                    Join our growing community.
+                    Bangladesh&apos;s most trusted rental marketplace.
                   </span>
                 </div>
               </div>
@@ -343,7 +343,7 @@ export default function ContactPage() {
               loading="lazy"
               allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215707164102!2d-73.98785312342371!3d40.75102877138766!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sbd!4v1710000000000!5m2!1sen!2sbd"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d233668.37218775956!2d90.27923849999999!3d23.780573!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8b087026b81%3A0x8fa563bbdd5904c2!2sDhaka%2C%20Bangladesh!5e0!3m2!1sen!2sbd!4v1710000000000!5m2!1sen!2sbd"
               className="h-full w-full opacity-90 contrast-[0.9] grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0"
             />
           </div>
@@ -356,11 +356,11 @@ export default function ContactPage() {
             <div>
               <h4 className="text-sm font-semibold">Visit our HQ</h4>
               <p className="text-xs text-muted-foreground">
-                New York, NY 10001
+                Dhaka, Bangladesh
               </p>
             </div>
             <a
-              href="https://maps.google.com/?q=New+York,+NY+10001"
+              href="https://maps.google.com/?q=Dhaka,+Bangladesh"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Get Directions"
