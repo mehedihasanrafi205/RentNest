@@ -19,7 +19,6 @@ import {
 import { Loader2, Lock, Mail, User, ShieldCheck, Eye, EyeOff } from "lucide-react";
 import { registerAction } from "../_action/auth";
 
-
 function RentNestLogo({ className = "" }: { className?: string }) {
   return (
     <span className={`flex items-end gap-2 ${className}`}>
@@ -118,25 +117,25 @@ export default function RegisterForm() {
               I am a
             </Label>
             <div className="relative">
-              <ShieldCheck className="absolute left-3.5 top-3.5 h-5 w-5 text-muted-foreground" />
+              <ShieldCheck className="absolute left-3.5 top-3.5 h-5 w-5 text-muted-foreground pointer-events-none" />
               <select
                 id="role"
                 name="role"
-                defaultValue="tenant"
-                className="w-full h-12 rounded-md border border-input bg-transparent px-3 py-1 pl-11 text-base shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                defaultValue="TENANT"
+                className="w-full h-12 rounded-md border border-input bg-background px-3 py-1 pl-11 text-base shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 required
               >
-                <option value="tenant" className="bg-background text-foreground">
+                <option value="TENANT" className="bg-background text-foreground">
                   Tenant (Looking for rent)
                 </option>
-                <option value="landlord" className="bg-background text-foreground">
+                <option value="LANDLORD" className="bg-background text-foreground">
                   Landlord (Renting out property)
                 </option>
               </select>
             </div>
           </div>
 
-          {/* Password Field with Eye Toggle */}
+          {/* Password Field */}
           <div className="space-y-2">
             <Label htmlFor="password" className="text-sm font-semibold">
               Password
@@ -150,6 +149,7 @@ export default function RegisterForm() {
                 placeholder="••••••••"
                 className="pl-11 pr-11 h-12 text-base"
                 required
+                minLength={6}
               />
               <button
                 type="button"

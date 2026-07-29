@@ -86,7 +86,7 @@ export async function registerAction(
   const name = formData.get("name") as string
   const email = formData.get("email") as string
   const password = formData.get("password") as string
-  const role = formData.get("role") as UserRole
+  const role = (formData.get("role") as string)?.toUpperCase()
 
   if (!name || !email || !password || !role) {
     return {
@@ -105,12 +105,20 @@ export async function registerAction(
       }
     )
 
-    const result: RegisterResponse = await response.json()
+    const result = await response.json()
 
     if (!response.ok || !result.success) {
+      let errorMessage = result?.message || "Failed to register account."
+
+      if (Array.isArray(result?.errorSources) && result.errorSources.length > 0) {
+        errorMessage = result.errorSources
+          .map((err: { path: string; message: string }) => `${err.path}: ${err.message}`)
+          .join(", ")
+      }
+
       return {
         success: false,
-        message: result?.message || "Failed to register account.",
+        message: errorMessage,
       }
     }
 
