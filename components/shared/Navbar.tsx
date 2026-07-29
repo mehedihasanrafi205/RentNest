@@ -19,6 +19,7 @@ import {
   LogOut,
   User,
   ChevronRight,
+  Contact,
 } from "lucide-react"
 
 import type { IUser } from "@/types"
@@ -64,6 +65,7 @@ const NAV_LINKS = [
   { label: "Home", href: "/", icon: Home },
   { label: "Properties", href: "/properties", icon: Building2 },
   { label: "About", href: "/about", icon: Info },
+  { label: "Contact", href: "/contact", icon: Contact },
 ]
 
 export default function Navbar() {
