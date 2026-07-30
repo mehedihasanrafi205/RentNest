@@ -1,6 +1,5 @@
 "use server";
 
-import { cookies } from "next/headers";
 
 // TypeScript Interfaces for Consistency
 export interface ActionResult<T = unknown> {
