@@ -1,6 +1,5 @@
 "use server"
 
-
 import type { IUser, IApiResponse } from "@/types"
 import { cookies } from "next/headers"
 
@@ -17,7 +16,11 @@ export async function getMe(): Promise<IUser | null> {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
-      cache: "no-store",
+      cache: "force-cache",
+      next: {
+        revalidate: 60 * 60 * 24,
+        tags: ["my-profile"],
+      },
     })
 
     if (!response.ok) return null

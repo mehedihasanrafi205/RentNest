@@ -1,8 +1,8 @@
 "use server"
 
-
-import type { LoginResponse} from "@/types"
-import { cookies } from "next/headers";
+import type { LoginResponse } from "@/types"
+import { revalidateTag } from "next/cache"
+import { cookies } from "next/headers"
 
 // Shared action return type
 type ActionResult = { success: boolean; message: string }
@@ -52,7 +52,6 @@ export async function loginAction(
       sameSite: "lax",
       path: "/",
     })
-
 
     if (refreshToken) {
       cookieStore.set("refreshToken", refreshToken, {
@@ -110,9 +109,15 @@ export async function registerAction(
     if (!response.ok || !result.success) {
       let errorMessage = result?.message || "Failed to register account."
 
-      if (Array.isArray(result?.errorSources) && result.errorSources.length > 0) {
+      if (
+        Array.isArray(result?.errorSources) &&
+        result.errorSources.length > 0
+      ) {
         errorMessage = result.errorSources
-          .map((err: { path: string; message: string }) => `${err.path}: ${err.message}`)
+          .map(
+            (err: { path: string; message: string }) =>
+              `${err.path}: ${err.message}`
+          )
           .join(", ")
       }
 
@@ -137,12 +142,11 @@ export async function registerAction(
   }
 }
 
-
-
 // ? LOgout ACTION
 
 export async function logoutAction(): Promise<void> {
   const cookieStore = await cookies()
   cookieStore.delete("accessToken")
   cookieStore.delete("refreshToken")
+  revalidateTag("my-profile", "max")
 }
