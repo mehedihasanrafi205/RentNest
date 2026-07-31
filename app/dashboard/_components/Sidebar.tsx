@@ -10,7 +10,8 @@ import {
   Users, 
   Settings, 
   LogOut, 
-  Home 
+  Home, 
+  DollarSignIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -47,7 +48,7 @@ export function SidebarContent({ userRole = "TENANT", onClose }: SidebarProps) {
     TENANT: [
       { label: "Overview", href: "/dashboard/tenant", icon: LayoutDashboard },
       { label: "My Bookings", href: "/dashboard/tenant/bookings", icon: CalendarCheck },
-      { label: "Saved Properties", href: "/dashboard/tenant/saved", icon: Building2 },
+      { label: "payments", href: "/dashboard/tenant/payments", icon: DollarSignIcon },
     ],
     LANDLORD: [
       { label: "Overview", href: "/dashboard/landlord", icon: LayoutDashboard },

@@ -120,6 +120,68 @@ export interface IPaginatedData<T> {
   };
 }
 
+
+export interface Property {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  price: number;
+  status: string;
+  landlordId: string;
+  categoryId: string | null;
+  amenities: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Booking {
+  id: string;
+  tenantId: string;
+  propertyId: string;
+  totalCost: number;
+  status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+  createdAt: string;
+  updatedAt: string;
+  property: Property;
+}
+
+export interface PaymentProperty {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  price: number;
+  status: string;
+  landlordId: string;
+  categoryId: string | null;
+  amenities: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaymentBooking {
+  id: string;
+  tenantId: string;
+  propertyId: string;
+  totalCost: number;
+  status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+  createdAt: string;
+  updatedAt: string;
+  property: PaymentProperty;
+}
+
+export interface PaymentHistoryItem {
+  id: string;
+  bookingId: string;
+  amount: number;
+  transactionId: string;
+  status: "PAID" | "UNPAID" | "FAILED";
+  createdAt: string;
+  updatedAt: string;
+  booking: PaymentBooking;
+}
+
 // SPECIFIC RESPONSE TYPES
 
 export type LoginResponse = IApiResponse<ILoginData>;
