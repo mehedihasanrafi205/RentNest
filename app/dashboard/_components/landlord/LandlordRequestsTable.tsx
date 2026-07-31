@@ -5,6 +5,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Check, X, Loader2 } from "lucide-react";
 import type { IRental } from "@/types";
+import { updateBookingStatus } from "../../_action/landlord/landlordActions";
+import { toast } from "sonner"; // Assuming sonner is installed for toast, or we just alert
 
 export default function LandlordRequestsTable({ initialRequests }: { initialRequests: IRental[] }) {
   const [requests, setRequests] = useState<IRental[]>(initialRequests);
@@ -13,13 +15,17 @@ export default function LandlordRequestsTable({ initialRequests }: { initialRequ
   const handleAction = async (id: string, newStatus: "APPROVED" | "REJECTED") => {
     setActionLoading(id);
     
-    // Simulate API call delay
-    setTimeout(() => {
+    const res = await updateBookingStatus(id, newStatus);
+    
+    if (res.success) {
       setRequests((prev) => 
         prev.map((req) => req.id === id ? { ...req, status: newStatus } : req)
       );
-      setActionLoading(null);
-    }, 1000);
+    } else {
+      alert(res.message || "Failed to update status");
+    }
+    
+    setActionLoading(null);
   };
 
   return (
