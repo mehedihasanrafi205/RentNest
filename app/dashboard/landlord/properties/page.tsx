@@ -1,9 +1,13 @@
-import React from 'react'
+import { getLandlordProperties } from "../../_action/landlord/landlordActions";
+import LandlordPropertiesTable from "../../_components/landlord/LandlordPropertiesTable";
 
-const LandlordPropertiesPage = () => {
+export default async function PropertiesPage() {
+  const propertiesRes = await getLandlordProperties();
+  const properties = propertiesRes.success ? propertiesRes.data : [];
+
   return (
-    <div>LandlordPropertiesPage</div>
-  )
+    <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+      <LandlordPropertiesTable initialProperties={properties} />
+    </div>
+  );
 }
-
-export default LandlordPropertiesPage

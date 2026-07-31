@@ -1,9 +1,13 @@
-import React from 'react'
+import { getLandlordRequests } from "../../_action/landlord/landlordActions";
+import LandlordRequestsTable from "../../_components/landlord/LandlordRequestsTable";
 
-const LandlordRequestsPage = () => {
+export default async function RequestsPage() {
+  const requestsRes = await getLandlordRequests();
+  const requests = requestsRes.success ? requestsRes.data : [];
+
   return (
-    <div>LandlordRequestsPage</div>
-  )
+    <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+      <LandlordRequestsTable initialRequests={requests} />
+    </div>
+  );
 }
-
-export default LandlordRequestsPage
