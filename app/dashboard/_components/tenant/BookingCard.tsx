@@ -2,20 +2,33 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { MapPin, Clock, CheckCircle2, XCircle, AlertCircle, ExternalLink, CreditCard, Loader2 } from "lucide-react";
+import { 
+  MapPin, 
+  CheckCircle2, 
+  ExternalLink, 
+  CreditCard, 
+  Loader2 
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Booking } from "@/types";
 import { createCheckoutSessionAction } from "../../_action/tenant/paymentActions";
 
 
-export function BookingCard({ booking }: { booking: Booking }) {
+interface BookingCardProps {
+  booking: Booking;
+  paidBookingIds?: string[]; 
+}
+
+export function BookingCard({ booking, paidBookingIds = [] }: BookingCardProps) {
   const [loading, setLoading] = useState(false);
+
+  const isAlreadyPaid = paidBookingIds.includes(booking.id);
 
   const handlePayment = async () => {
     setLoading(true);
     const res = await createCheckoutSessionAction(booking.id);
     if (res.success && res.url) {
-      window.location.href = res.url; 
+      window.location.href = res.url;
     } else {
       alert(res.message || "Could not initiate payment");
       setLoading(false);
@@ -57,7 +70,7 @@ export function BookingCard({ booking }: { booking: Booking }) {
         </span>
 
         <div className="flex items-center gap-2">
-          {booking.status === "APPROVED" && (
+          {booking.status === "APPROVED" && !isAlreadyPaid && (
             <Button
               onClick={handlePayment}
               disabled={loading}
@@ -67,6 +80,12 @@ export function BookingCard({ booking }: { booking: Booking }) {
               {loading ? <Loader2 size={13} className="animate-spin" /> : <CreditCard size={13} />}
               Pay Now
             </Button>
+          )}
+
+          {isAlreadyPaid && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+              <CheckCircle2 size={13} /> Paid
+            </span>
           )}
 
           <Button asChild variant="ghost" size="sm" className="h-8 rounded-lg text-xs text-muted-foreground">
