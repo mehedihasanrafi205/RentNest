@@ -10,8 +10,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash, Plus, Loader2, UploadCloud } from "lucide-react"
+import { Edit, Trash, Plus, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { toast } from "sonner"
 import {
   Dialog,
   DialogContent,
@@ -37,9 +38,17 @@ export default function LandlordPropertiesTable({
   const [amenitiesStr, setAmenitiesStr] = useState("")
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this property?")) {
-      setProperties((prev) => prev.filter((p) => p.id !== id))
-    }
+    toast("Delete this property?", {
+      description: "This will remove the listing permanently.",
+      action: {
+        label: "Delete",
+        onClick: () => {
+          setProperties((prev) => prev.filter((p) => p.id !== id))
+          toast.success("Property deleted.")
+        },
+      },
+      cancel: { label: "Cancel", onClick: () => {} },
+    })
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -52,13 +61,12 @@ export default function LandlordPropertiesTable({
     const res = await createPropertyListing(formData)
 
     if (res.success) {
-      alert("Property created successfully!")
+      toast.success("Property created successfully!")
       setProperties((prev) => [res.data, ...prev])
       setIsOpen(false)
-      // Reset form string
       setAmenitiesStr("")
     } else {
-      alert(res.message || "Failed to create property.")
+      toast.error(res.message || "Failed to create property.")
     }
 
     setLoading(false)

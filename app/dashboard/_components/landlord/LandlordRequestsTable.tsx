@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Check, X, Loader2 } from "lucide-react";
 import type { IRental } from "@/types";
 import { updateBookingStatus } from "../../_action/landlord/landlordActions";
-import { toast } from "sonner"; // Assuming sonner is installed for toast, or we just alert
+import { toast } from "sonner";
 
 export default function LandlordRequestsTable({ initialRequests }: { initialRequests: IRental[] }) {
   const [requests, setRequests] = useState<IRental[]>(initialRequests);
@@ -21,8 +21,9 @@ export default function LandlordRequestsTable({ initialRequests }: { initialRequ
       setRequests((prev) => 
         prev.map((req) => req.id === id ? { ...req, status: newStatus } : req)
       );
+      toast.success(`Request ${newStatus.toLowerCase()} successfully.`);
     } else {
-      alert(res.message || "Failed to update status");
+      toast.error(res.message || "Failed to update status.");
     }
     
     setActionLoading(null);

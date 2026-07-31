@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Trash2, Loader2, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 import type { IProperty } from "@/types";
 import { deletePropertyAdmin } from "../../_action/admin/adminActions";
 
@@ -13,19 +14,24 @@ export default function AdminPropertiesTable({ initialProperties }: { initialPro
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to completely delete this property listing? This action cannot be undone.")) {
-      return;
-    }
-
-    setLoadingId(id);
-    const res = await deletePropertyAdmin(id);
-
-    if (res.success) {
-      setProperties((prev) => prev.filter((p) => p.id !== id));
-    } else {
-      alert(res.message || "Failed to delete property.");
-    }
-    setLoadingId(null);
+    toast("Delete this property?", {
+      description: "This action cannot be undone.",
+      action: {
+        label: "Delete",
+        onClick: async () => {
+          setLoadingId(id);
+          const res = await deletePropertyAdmin(id);
+          if (res.success) {
+            setProperties((prev) => prev.filter((p) => p.id !== id));
+            toast.success("Property deleted successfully.");
+          } else {
+            toast.error(res.message || "Failed to delete property.");
+          }
+          setLoadingId(null);
+        },
+      },
+      cancel: { label: "Cancel", onClick: () => {} },
+    });
   };
 
   return (

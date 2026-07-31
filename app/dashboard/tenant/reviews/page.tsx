@@ -7,7 +7,7 @@ export default async function TenantReviewsPage() {
 
   // Filter to only include bookings that might be eligible for review (e.g. APPROVED or paid)
   // Assuming a tenant can review any property they've successfully booked.
-  const approvedBookings = bookings.filter((b) => b.status === "APPROVED");
+  const approvedBookings = bookings.filter((b: { status: string }) => b.status === "APPROVED");
 
   return (
     <div className="max-w-6xl mx-auto">

@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Booking } from "@/types";
 import { createCheckoutSessionAction } from "../../_action/tenant/paymentActions";
+import { toast } from "sonner";
 
 
 interface BookingCardProps {
@@ -30,7 +31,7 @@ export function BookingCard({ booking, paidBookingIds = [] }: BookingCardProps) 
     if (res.success && res.url) {
       window.location.href = res.url;
     } else {
-      alert(res.message || "Could not initiate payment");
+      toast.error(res.message || "Could not initiate payment.");
       setLoading(false);
     }
   };

@@ -5,6 +5,7 @@ import { Star, Loader2, MessageSquareText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { toast } from "sonner";
 import { Booking } from "@/types";
 import { submitReviewAction } from "../../_action/tenant/reviewActions";
 
@@ -28,13 +29,13 @@ export function ReviewsView({ bookings }: { bookings: Booking[] }) {
     const res = await submitReviewAction(selectedPropertyId, rating, comment);
     
     if (res.success) {
-      alert("Review submitted successfully!");
+      toast.success("Review submitted successfully!");
       setSubmittedIds((prev) => new Set(prev).add(selectedPropertyId));
       setSelectedPropertyId(null);
       setRating(5);
       setComment("");
     } else {
-      alert(res.message || "Failed to submit review.");
+      toast.error(res.message || "Failed to submit review.");
     }
     setLoading(false);
   };

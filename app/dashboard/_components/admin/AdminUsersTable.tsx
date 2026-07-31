@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Shield, ShieldAlert, Loader2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { toast } from "sonner";
 import type { IUser } from "@/types";
 import { toggleUserBanStatus } from "../../_action/admin/adminActions";
 
@@ -22,8 +23,9 @@ export default function AdminUsersTable({ initialUsers }: { initialUsers: IUser[
       setUsers((prev) => 
         prev.map((u) => u.id === id ? { ...u, isBanned: newStatus } : u)
       );
+      toast.success(newStatus ? "User banned successfully." : "User unbanned successfully.");
     } else {
-      alert(res.message || "Failed to update user status.");
+      toast.error(res.message || "Failed to update user status.");
     }
     setLoadingId(null);
   };
