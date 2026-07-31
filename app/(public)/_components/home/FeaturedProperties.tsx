@@ -32,9 +32,9 @@ export function FeaturedProperties() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getAllPropertiesAction({ limit: "6" }).then((res) => {
+    getAllPropertiesAction({ limit: "3" }).then((res) => {
       if (res.success && Array.isArray(res.data)) {
-        setProperties(res.data.slice(0, 6))
+        setProperties(res.data.slice(0, 3))
       }
       setLoading(false)
     })

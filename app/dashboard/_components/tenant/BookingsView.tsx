@@ -10,9 +10,10 @@ import { BookingCard } from "./BookingCard";
 
 interface BookingsViewProps {
   initialBookings: Booking[];
+  paidBookingIds?: string[];
 }
 
-export function BookingsView({ initialBookings }: BookingsViewProps) {
+export function BookingsView({ initialBookings, paidBookingIds = [] }: BookingsViewProps) {
   const [filterStatus, setFilterStatus] = useState<string>("ALL");
 
   const filteredBookings = initialBookings.filter((booking) => {
@@ -68,7 +69,7 @@ export function BookingsView({ initialBookings }: BookingsViewProps) {
         /* Bookings List */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredBookings.map((booking) => (
-            <BookingCard key={booking.id} booking={booking} />
+            <BookingCard key={booking.id} booking={booking} paidBookingIds={paidBookingIds} />
           ))}
         </div>
       )}

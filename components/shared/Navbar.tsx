@@ -23,7 +23,6 @@ import {
 } from "lucide-react"
 
 import type { IUser } from "@/types"
-import { getMe } from "@/service/getme"
 import { logoutAction } from "@/app/(auth)/_action/auth"
 
 // Shadcn UI Imports
@@ -81,17 +80,22 @@ export default function Navbar() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const currentUser = await getMe()
-        setUser(currentUser)
+        const res = await fetch("/api/me");
+        if (!res.ok) {
+          setUser(null);
+          return;
+        }
+        const data = await res.json();
+        setUser(data?.success ? data.data : null);
       } catch {
-        setUser(null)
+        setUser(null);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchUser()
-  }, [pathname])
+    fetchUser();
+  }, [pathname]);
 
   /* navbar shadow on scroll */
   useEffect(() => {

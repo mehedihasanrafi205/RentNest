@@ -65,8 +65,8 @@ export async function createPropertyListing(formData: FormData) {
     description: formData.get("description"),
     location: formData.get("location"),
     price: Number(formData.get("price")),
-    amenities: (formData.get("amenities") as string)?.split(",").map(a => a.trim()) || [],
-    // Add image handling/upload if needed in the future
+    amenities: (formData.get("amenities") as string)?.split(",").map(a => a.trim()).filter(Boolean) || [],
+    images: formData.get("imageUrl") ? [formData.get("imageUrl") as string] : [],
   };
 
   try {

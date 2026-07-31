@@ -12,5 +12,10 @@ export default async function TenantBookingsPage() {
   const bookings = bookingsRes.success ? bookingsRes.data : []
   const payments = paymentsRes.success ? paymentsRes.data : []
 
-  return <BookingsView initialBookings={bookings} />
+  // Extract paid booking IDs so BookingCard can show "Paid" badge
+  const paidBookingIds: string[] = payments
+    .filter((p: { status: string }) => p.status === "PAID")
+    .map((p: { bookingId: string }) => p.bookingId)
+
+  return <BookingsView initialBookings={bookings} paidBookingIds={paidBookingIds} />
 }

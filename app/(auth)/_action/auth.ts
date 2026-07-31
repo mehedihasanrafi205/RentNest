@@ -148,5 +148,5 @@ export async function logoutAction(): Promise<void> {
   const cookieStore = await cookies()
   cookieStore.delete("accessToken")
   cookieStore.delete("refreshToken")
-  revalidateTag("my-profile", "max")
+  revalidateTag("my-profile")
 }

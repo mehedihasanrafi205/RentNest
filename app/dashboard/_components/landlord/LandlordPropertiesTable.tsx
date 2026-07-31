@@ -153,14 +153,13 @@ export default function LandlordPropertiesTable({
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="price">Property Image URL</Label>
+                  <Label htmlFor="imageUrl">Property Image URL</Label>
                   <Input
-                    id="price"
-                    name="price"
+                    id="imageUrl"
+                    name="imageUrl"
                     type="text"
-                    min="0"
                     required
-                    placeholder="Image URL"
+                    placeholder="https://example.com/image.jpg"
                   />
                 </div>
 

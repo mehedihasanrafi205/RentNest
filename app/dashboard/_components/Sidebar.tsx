@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { 
   LayoutDashboard, 
@@ -14,6 +14,7 @@ import {
   DollarSignIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { logoutAction } from "@/app/(auth)/_action/auth";
 
 export function RentNestLogo({ className = "" }: { className?: string }) {
   return (
@@ -43,6 +44,14 @@ interface SidebarProps {
 
 export function SidebarContent({ userRole = "TENANT", onClose }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logoutAction();
+    if (onClose) onClose();
+    router.push("/login");
+    router.refresh();
+  };
 
   const navItems = {
     TENANT: [
@@ -121,10 +130,7 @@ export function SidebarContent({ userRole = "TENANT", onClose }: SidebarProps) {
           Settings
         </Link>
         <button
-          onClick={() => {
-            /* Logout Logic */
-            if (onClose) onClose();
-          }}
+          onClick={handleLogout}
           className="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors"
         >
           <LogOut className="h-4 w-4" />

@@ -1,9 +1,14 @@
-import React from 'react'
+import { redirect } from "next/navigation";
+import { getMe } from "@/service/getme";
 
-const DashboardPage = () => {
-  return (
-    <div>DashboardPage</div>
-  )
+export default async function DashboardPage() {
+  const user = await getMe();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (user.role === "ADMIN") redirect("/dashboard/admin");
+  if (user.role === "LANDLORD") redirect("/dashboard/landlord");
+  redirect("/dashboard/tenant");
 }
-
-export default DashboardPage
