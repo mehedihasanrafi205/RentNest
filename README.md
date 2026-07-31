@@ -1,6 +1,27 @@
-# 🏠 RentNest — Modern House & Property Rental System
+<div align="center">
 
-**RentNest** is a full-stack, production-ready house and property rental application built using Next.js 15 (App Router), TypeScript, Tailwind CSS, Shadcn UI, and Stripe Payment Gateway. It seamlessly connects Tenants with Landlords for hassle-free property listings, booking requests, and secure online rental transactions.
+  <h1>🏠 RentNest — Modern Property Rental System</h1>
+  <p><b>RentNest is a full-stack, production-ready house and property rental application built using Next.js 15 (App Router), TypeScript, Tailwind CSS, Shadcn UI, and Stripe Payment Gateway. It seamlessly connects Tenants with Landlords for hassle-free property listings, booking requests, and secure online rental transactions.</b></p>
+
+  <!-- Badges -->
+  <p>
+    <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js-15.2.0-black?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" /></a>
+    <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" /></a>
+    <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" /></a>
+    <a href="https://expressjs.com"><img src="https://img.shields.io/badge/Express.js-5.x-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express" /></a>
+    <a href="https://www.prisma.io"><img src="https://img.shields.io/badge/Prisma-7.x-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma" /></a>
+    <a href="https://www.postgresql.org"><img src="https://img.shields.io/badge/PostgreSQL-DB-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" /></a>
+    <a href="https://stripe.com"><img src="https://img.shields.io/badge/Stripe-Payment-635BFF?style=for-the-badge&logo=stripe&logoColor=white" alt="Stripe" /></a>
+    <a href="https://vercel.com"><img src="https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" /></a>
+  </p>
+
+  <p>
+    <a href="#-live-links--repositories"><b>Explore Live Demo »</b></a> •
+    <a href="#-api-endpoints"><b>API Reference</b></a> •
+    <a href="#-getting-started"><b>Setup Locally</b></a>
+  </p>
+
+</div>
 
 ---
 
