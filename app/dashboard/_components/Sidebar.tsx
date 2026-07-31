@@ -49,6 +49,7 @@ export function SidebarContent({ userRole = "TENANT", onClose }: SidebarProps) {
       { label: "Overview", href: "/dashboard/tenant", icon: LayoutDashboard },
       { label: "My Bookings", href: "/dashboard/tenant/bookings", icon: CalendarCheck },
       { label: "Payments", href: "/dashboard/tenant/payments", icon: DollarSignIcon },
+      { label: "Reviews", href: "/dashboard/tenant/reviews", icon: Users },
     ],
     LANDLORD: [
       { label: "Overview", href: "/dashboard/landlord", icon: LayoutDashboard },
