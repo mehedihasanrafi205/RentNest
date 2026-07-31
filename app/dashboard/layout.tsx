@@ -1,22 +1,40 @@
 "use client";
 
-import React, { useState,  } from "react";
-import { Bell, User, Menu, X} from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Bell, User, Menu, X, Loader2 } from "lucide-react";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { RentNestLogo, SidebarContent } from "./_components/Sidebar";
 import { ThemeToggle } from "./_components/ThemeToggle";
+import { getMe } from "@/service/getme";
+import type { IUser } from "@/types";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-
-
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<IUser | null>(null);
+  const [loading, setLoading] = useState(true);
   
-  const userRole: "TENANT" | "LANDLORD" | "ADMIN" = "TENANT";
+  useEffect(() => {
+    getMe().then((res) => {
+      setUser(res);
+      setLoading(false);
+    });
+  }, []);
+
+  const userRole = user?.role || "TENANT";
+
+  if (loading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-background antialiased">
@@ -84,11 +102,21 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             </Button>
 
             <div className="flex items-center gap-3 border-l border-border pl-3 md:pl-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#00a17f]/10 text-[#00a17f] font-bold text-sm">
-                <User className="h-5 w-5" />
-              </div>
+              {user?.image ? (
+                <Image
+                  src={user.image}
+                  alt={user.name || "User"}
+                  width={36}
+                  height={36}
+                  className="h-9 w-9 rounded-full object-cover"
+                />
+              ) : (
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#00a17f]/10 text-[#00a17f] font-bold text-sm">
+                  <User className="h-5 w-5" />
+                </div>
+              )}
               <div className="hidden text-left sm:block">
-                <p className="text-sm font-medium text-foreground">John Doe</p>
+                <p className="text-sm font-medium text-foreground">{user?.name || "Guest"}</p>
                 <p className="text-xs text-muted-foreground capitalize">{userRole.toLowerCase()}</p>
               </div>
             </div>
