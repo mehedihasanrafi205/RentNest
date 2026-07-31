@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react";
+import Link from "next/link";
 import { Home, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -32,11 +33,12 @@ export function RoleCtaSection() {
               Access thousands of verified listings with smart filters and instant tour booking options.
             </p>
             <Button
+              asChild
               variant="secondary"
               size="lg"
               className="font-bold rounded-xl shadow-md"
             >
-              Browse Homes
+              <Link href="/properties">Browse Homes</Link>
             </Button>
           </div>
           <Home className="absolute -bottom-10 -right-10 w-64 h-64 opacity-10 rotate-12 group-hover:scale-110 transition-transform duration-500 pointer-events-none" />
@@ -58,10 +60,11 @@ export function RoleCtaSection() {
               List your property today and reach millions of qualified renters with our easy-to-use platform.
             </p>
             <Button
+              asChild
               size="lg"
               className="font-bold rounded-xl shadow-md"
             >
-              List Your Home
+              <Link href="/dashboard/landlord/properties">List Your Home</Link>
             </Button>
           </div>
           <Building2 className="absolute -bottom-10 -right-10 w-64 h-64 text-foreground opacity-5 -rotate-12 group-hover:scale-110 transition-transform duration-500 pointer-events-none" />

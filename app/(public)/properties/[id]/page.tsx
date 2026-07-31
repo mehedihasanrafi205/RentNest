@@ -183,7 +183,7 @@ const IndividualPropertyPage = async ({ params }: PropertyDetailPageProps) => {
                 ${property.price?.toLocaleString()}
                 <span className="text-sm font-normal text-muted-foreground">
                   {" "}
-                  / total
+                  / month
                 </span>
               </div>
             </div>

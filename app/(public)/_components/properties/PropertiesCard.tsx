@@ -73,7 +73,7 @@ const PropertiesCard = ({ property }: PropertiesCardProps) => {
             <span className="text-2xl font-black tracking-tight">
               ${property.price ? property.price.toLocaleString() : "N/A"}
             </span>
-            <span className="text-xs text-white/80 font-normal"> / total</span>
+            <span className="text-xs text-white/80 font-normal"> / month</span>
           </div>
         </div>
 

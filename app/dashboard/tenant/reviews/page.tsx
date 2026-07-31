@@ -1,4 +1,4 @@
-import { getMyBookingsAction } from "../../_action/tenant/bookingActions";
+import { getMyBookingsAction } from "../../_action/tenant/myBookingsAction";
 import { ReviewsView } from "../../_components/tenant/ReviewsView";
 
 export default async function TenantReviewsPage() {
@@ -7,7 +7,7 @@ export default async function TenantReviewsPage() {
 
   // Filter to only include bookings that might be eligible for review (e.g. APPROVED or paid)
   // Assuming a tenant can review any property they've successfully booked.
-  const approvedBookings = bookings.filter((b: any) => b.status === "APPROVED");
+  const approvedBookings = bookings.filter((b) => b.status === "APPROVED");
 
   return (
     <div className="max-w-6xl mx-auto">

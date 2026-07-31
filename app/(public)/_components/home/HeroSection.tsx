@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Search, MapPin, Home as HomeIcon, DollarSign } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,13 +15,18 @@ import {
 import { motion } from "framer-motion"
 
 export function HeroSection() {
+  const router = useRouter()
   const [location, setLocation] = useState("")
-  const [propertyType, setPropertyType] = useState("apartment")
-  const [priceRange, setPriceRange] = useState("500-1500")
+  const [propertyType, setPropertyType] = useState("all")
+  const [priceRange, setPriceRange] = useState("all")
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log({ location, propertyType, priceRange })
+    const params = new URLSearchParams()
+    if (location) params.set("location", location)
+    if (propertyType && propertyType !== "all") params.set("propertyType", propertyType)
+    if (priceRange && priceRange !== "all") params.set("priceRange", priceRange)
+    router.push(`/properties${params.toString() ? `?${params.toString()}` : ""}`)
   }
 
   return (
@@ -29,11 +35,9 @@ export function HeroSection() {
       <div className="absolute inset-0 z-0">
         <div
           className="h-full w-full scale-105 bg-cover bg-center transition-transform duration-1000"
-          style={{
-            backgroundImage: "url('/Hero-bg.jpg')",
-          }}
+          style={{ backgroundImage: "url('/Hero-bg.jpg')" }}
         />
-        <div className="absolute inset-0 bg-linear-to-t from-background via-background/60 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-black/70" />
       </div>
 
       {/* Main Content */}
@@ -93,6 +97,7 @@ export function HeroSection() {
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="all">Any Type</SelectItem>
                     <SelectItem value="apartment">Apartment</SelectItem>
                     <SelectItem value="house">Family House</SelectItem>
                     <SelectItem value="studio">Studio</SelectItem>
@@ -114,6 +119,8 @@ export function HeroSection() {
                     <SelectValue placeholder="Select range" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="all">Any Price</SelectItem>
+                    <SelectItem value="0-500">Under $500</SelectItem>
                     <SelectItem value="500-1500">$500 - $1,500</SelectItem>
                     <SelectItem value="1500-3000">$1,500 - $3,000</SelectItem>
                     <SelectItem value="3000+">$3,000+</SelectItem>
