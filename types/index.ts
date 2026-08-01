@@ -140,7 +140,7 @@ export interface Booking {
   tenantId: string;
   propertyId: string;
   totalCost: number;
-  status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+  status: "PENDING" | "APPROVED" | "REJECTED" | "ACTIVE" | "COMPLETED" | "CANCELLED";
   createdAt: string;
   updatedAt: string;
   property: Property;
@@ -165,7 +165,7 @@ export interface PaymentBooking {
   tenantId: string;
   propertyId: string;
   totalCost: number;
-  status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+  status: "PENDING" | "APPROVED" | "REJECTED" | "ACTIVE" | "COMPLETED" | "CANCELLED";
   createdAt: string;
   updatedAt: string;
   property: PaymentProperty;

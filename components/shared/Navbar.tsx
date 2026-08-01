@@ -27,7 +27,7 @@ import { logoutAction } from "@/app/(auth)/_action/auth"
 
 // Shadcn UI Imports
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,6 +37,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { getMe } from "@/service/getme"
 
 function RentNestLogo({ className = "" }: { className?: string }) {
   return (
@@ -76,26 +77,21 @@ export default function Navbar() {
   const [user, setUser] = useState<IUser | null>(null)
   const [loading, setLoading] = useState(true)
 
-  /* Fetch Logged-in User Info */
+  /* Fetch Logged-in User Info using Server Action */
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("/api/me");
-        if (!res.ok) {
-          setUser(null);
-          return;
-        }
-        const data = await res.json();
-        setUser(data?.success ? data.data : null);
+        const currentUser = await getMe()
+        setUser(currentUser)
       } catch {
-        setUser(null);
+        setUser(null)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchUser();
-  }, [pathname]);
+    fetchUser()
+  }, [pathname])
 
   /* navbar shadow on scroll */
   useEffect(() => {

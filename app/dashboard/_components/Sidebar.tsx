@@ -3,15 +3,15 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { 
-  LayoutDashboard, 
-  Building2, 
-  CalendarCheck, 
-  Users, 
-  Settings, 
-  LogOut, 
-  Home, 
-  DollarSignIcon
+import {
+  LayoutDashboard,
+  Building2,
+  CalendarCheck,
+  Users,
+  LogOut,
+  Home,
+  DollarSignIcon,
+  UserCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { logoutAction } from "@/app/(auth)/_action/auth";
@@ -122,12 +122,12 @@ export function SidebarContent({ userRole = "TENANT", onClose }: SidebarProps) {
           Back to Home
         </Link>
         <Link
-          href="/dashboard/settings"
+          href="/profile"
           onClick={onClose}
           className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
         >
-          <Settings className="h-4 w-4" />
-          Settings
+          <UserCircle className="h-4 w-4" />
+          My Profile
         </Link>
         <button
           onClick={handleLogout}

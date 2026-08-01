@@ -2,17 +2,27 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { 
-  MapPin, 
-  CheckCircle2, 
-  ExternalLink, 
-  CreditCard, 
-  Loader2 
+import {
+  MapPin,
+  CheckCircle2,
+  ExternalLink,
+  CreditCard,
+  Loader2,
+  Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Booking } from "@/types";
 import { createCheckoutSessionAction } from "../../_action/tenant/paymentActions";
 import { toast } from "sonner";
+
+// Status badge color mapping per assignment requirements
+const STATUS_BADGE_STYLES: Record<string, string> = {
+  PENDING: "bg-amber-500/10 text-amber-600 border-amber-500/20",
+  APPROVED: "bg-blue-500/10 text-blue-600 border-blue-500/20",
+  REJECTED: "bg-red-500/10 text-red-600 border-red-500/20",
+  ACTIVE: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
+  COMPLETED: "bg-gray-500/10 text-gray-600 border-gray-500/20",
+};
 
 
 interface BookingCardProps {
@@ -43,7 +53,11 @@ export function BookingCard({ booking, paidBookingIds = [] }: BookingCardProps) 
           <h3 className="font-semibold text-lg text-foreground line-clamp-1 group-hover:text-[#00a17f] transition-colors">
             {booking.property?.title || "Untitled Property"}
           </h3>
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+          <span
+            className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+              STATUS_BADGE_STYLES[booking.status] || STATUS_BADGE_STYLES.PENDING
+            }`}
+          >
             {booking.status}
           </span>
         </div>
@@ -87,6 +101,18 @@ export function BookingCard({ booking, paidBookingIds = [] }: BookingCardProps) 
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
               <CheckCircle2 size={13} /> Paid
             </span>
+          )}
+
+          {booking.status === "ACTIVE" && (
+            <Button
+              asChild
+              size="sm"
+              className="h-8 bg-[#00a17f] hover:bg-[#00a17f]/90 text-white rounded-lg gap-1.5 text-xs"
+            >
+              <Link href="/dashboard/tenant/reviews">
+                <Star size={13} /> Leave Review
+              </Link>
+            </Button>
           )}
 
           <Button asChild variant="ghost" size="sm" className="h-8 rounded-lg text-xs text-muted-foreground">

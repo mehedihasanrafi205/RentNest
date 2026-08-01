@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash, Plus, Loader2 } from "lucide-react"
+import { Trash, Plus, Loader2, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 import {
@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import type { IProperty } from "@/types"
-import { createPropertyListing } from "../../_action/landlord/landlordActions"
+import { createPropertyListing, deletePropertyAction } from "../../_action/landlord/landlordActions"
 
 export default function LandlordPropertiesTable({
   initialProperties,
@@ -35,6 +35,7 @@ export default function LandlordPropertiesTable({
   const [properties, setProperties] = useState<IProperty[]>(initialProperties)
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [deleteLoadingId, setDeleteLoadingId] = useState<string | null>(null)
   const [amenitiesStr, setAmenitiesStr] = useState("")
 
   const handleDelete = async (id: string) => {
@@ -42,9 +43,16 @@ export default function LandlordPropertiesTable({
       description: "This will remove the listing permanently.",
       action: {
         label: "Delete",
-        onClick: () => {
-          setProperties((prev) => prev.filter((p) => p.id !== id))
-          toast.success("Property deleted.")
+        onClick: async () => {
+          setDeleteLoadingId(id)
+          const res = await deletePropertyAction(id)
+          if (res.success) {
+            setProperties((prev) => prev.filter((p) => p.id !== id))
+            toast.success("Property deleted successfully.")
+          } else {
+            toast.error(res.message || "Failed to delete property.")
+          }
+          setDeleteLoadingId(null)
         },
       },
       cancel: { label: "Cancel", onClick: () => {} },
@@ -230,19 +238,25 @@ export default function LandlordPropertiesTable({
                     <div className="flex justify-end gap-2">
                       <Button variant="ghost" size="icon" asChild>
                         <Link
-                          href={`/dashboard/landlord/properties/edit/${property.id}`}
+                          href={`/properties/${property.id}`}
+                          target="_blank"
                         >
-                          <Edit className="h-4 w-4" />
-                          <span className="sr-only">Edit</span>
+                          <ExternalLink className="h-4 w-4" />
+                          <span className="sr-only">View</span>
                         </Link>
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
+                        disabled={deleteLoadingId === property.id}
                         onClick={() => handleDelete(property.id)}
                         className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                       >
-                        <Trash className="h-4 w-4" />
+                        {deleteLoadingId === property.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Trash className="h-4 w-4" />
+                        )}
                         <span className="sr-only">Delete</span>
                       </Button>
                     </div>

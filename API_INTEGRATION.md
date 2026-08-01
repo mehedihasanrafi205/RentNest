@@ -24,6 +24,7 @@ Configured in `.env` as `BACKEND_API_URL`. All server actions use this variable.
 | `RegisterForm.tsx` → `registerAction()` | `POST` | `/auth/register` | Create new account with `name`, `email`, `password`, `role` |
 | `logoutAction()` | — | (cookie delete) | Clears `accessToken` & `refreshToken` cookies, revalidates cache |
 | `service/getme.ts` → `getMe()` | `GET` | `/users/me` | Fetch current user profile using `accessToken` cookie |
+| `app/profile/_action/updateMeAction.ts` → `updateMeAction()` | `PATCH` | `/users/update-me` | Update current user's `name`, `email`, and `image` using `accessToken` cookie; revalidates `my-profile` cache tag |
 
 **Token Storage:** Cookies (`accessToken`, `refreshToken`) — httpOnly, secure in production  
 **Route Protection:** `proxy.ts` (Next.js middleware) — JWT decode + RBAC redirect

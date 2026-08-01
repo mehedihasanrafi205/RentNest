@@ -33,7 +33,7 @@ export function BookingsView({ initialBookings, paidBookingIds = [] }: BookingsV
         </div>
 
         <div className="flex flex-wrap items-center gap-2 bg-card p-1.5 rounded-xl border border-border">
-          {["ALL", "PENDING", "APPROVED", "REJECTED"].map((status) => (
+          {["ALL", "PENDING", "APPROVED", "ACTIVE", "COMPLETED", "REJECTED"].map((status) => (
             <button
               key={status}
               onClick={() => setFilterStatus(status)}

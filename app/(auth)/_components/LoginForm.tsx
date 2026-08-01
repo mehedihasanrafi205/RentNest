@@ -51,7 +51,7 @@ export default function LoginForm() {
 
     if (state.success) {
       toast.success(state.message || "Login successful!");
-      router.push("/");
+      router.push("/dashboard");
     } else {
       toast.error(state.message || "Invalid credentials!");
     }
@@ -100,12 +100,9 @@ export default function LoginForm() {
               <Label htmlFor="password" className="text-sm font-semibold">
                 Password
               </Label>
-              <Link
-                href="/forgot-password"
-                className="text-sm text-primary hover:underline font-medium"
-              >
+              <span className="text-sm text-muted-foreground">
                 Forgot password?
-              </Link>
+              </span>
             </div>
             <div className="relative">
               <Lock className="absolute left-3.5 top-3.5 h-5 w-5 text-muted-foreground" />

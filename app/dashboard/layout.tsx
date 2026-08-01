@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Bell, User, Menu, X, Loader2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { RentNestLogo, SidebarContent } from "./_components/Sidebar";
@@ -101,7 +102,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-[#00a17f]" />
             </Button>
 
-            <div className="flex items-center gap-3 border-l border-border pl-3 md:pl-4">
+            <Link
+              href="/profile"
+              className="flex items-center gap-3 border-l border-border pl-3 md:pl-4 transition-opacity hover:opacity-80"
+            >
               {user?.image ? (
                 <Image
                   src={user.image}
@@ -119,7 +123,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 <p className="text-sm font-medium text-foreground">{user?.name || "Guest"}</p>
                 <p className="text-xs text-muted-foreground capitalize">{userRole.toLowerCase()}</p>
               </div>
-            </div>
+            </Link>
           </div>
         </header>
 

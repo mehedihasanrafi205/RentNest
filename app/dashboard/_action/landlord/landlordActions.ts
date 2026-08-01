@@ -86,6 +86,29 @@ export async function createPropertyListing(formData: FormData) {
   }
 }
 
+export async function deletePropertyAction(propertyId: string) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("accessToken")?.value;
+
+  if (!accessToken) {
+    return { success: false, message: "Unauthorized" };
+  }
+
+  try {
+    const res = await fetch(`${process.env.BACKEND_API_URL}/properties/${propertyId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    return { success: false, message: "Something went wrong" };
+  }
+}
+
 export async function updateBookingStatus(id: string, status: "APPROVED" | "REJECTED") {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
