@@ -16,9 +16,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Loader2, Lock, Mail, Eye, EyeOff } from "lucide-react";
+import { Loader2, Lock, Mail, Eye, EyeOff, UserCheck, ShieldAlert, Building2 } from "lucide-react";
 import { loginAction } from "../_action/auth";
-
 
 function RentNestLogo({ className = "" }: { className?: string }) {
   return (
@@ -46,6 +45,10 @@ export default function LoginForm() {
   const [state, formAction, pending] = useActionState(loginAction, null);
   const [showPassword, setShowPassword] = useState(false);
 
+  // Controlled states for quick-fill demo credentials
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   useEffect(() => {
     if (!state) return;
 
@@ -56,6 +59,13 @@ export default function LoginForm() {
       toast.error(state.message || "Invalid credentials!");
     }
   }, [state, router]);
+
+  // Helper function to fill demo credentials
+  const handleQuickFill = (userEmail: string, userPass: string) => {
+    setEmail(userEmail);
+    setPassword(userPass);
+    toast.info("Demo credentials applied!");
+  };
 
   return (
     <Card className="w-full max-w-xl border-border/60 shadow-xl p-4 sm:p-6">
@@ -74,7 +84,48 @@ export default function LoginForm() {
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="pt-2">
+      <CardContent className="pt-2 space-y-6">
+        {/* Quick Demo Login Buttons */}
+        <div className="p-3.5 bg-muted/40 rounded-xl border border-border/60 space-y-2">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
+            ⚡ Demo Quick Fill
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => handleQuickFill("tenant@example.com", "password123")}
+              className="text-xs h-9 font-medium hover:border-[#00a17f] hover:text-[#00a17f] transition-all"
+            >
+              <UserCheck className="mr-1 h-3.5 w-3.5" />
+              Tenant
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => handleQuickFill("landlord@example.com", "password123")}
+              className="text-xs h-9 font-medium hover:border-[#00a17f] hover:text-[#00a17f] transition-all"
+            >
+              <Building2 className="mr-1 h-3.5 w-3.5" />
+              Landlord
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => handleQuickFill("admin@rentnest.com", "admin123")}
+              className="text-xs h-9 font-medium hover:border-[#00a17f] hover:text-[#00a17f] transition-all"
+            >
+              <ShieldAlert className="mr-1 h-3.5 w-3.5" />
+              Admin
+            </Button>
+          </div>
+        </div>
+
         <form action={formAction} className="space-y-6">
           {/* Email Field */}
           <div className="space-y-2">
@@ -87,6 +138,8 @@ export default function LoginForm() {
                 id="email"
                 name="email"
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
                 className="pl-11 h-12 text-base"
                 required
@@ -100,7 +153,7 @@ export default function LoginForm() {
               <Label htmlFor="password" className="text-sm font-semibold">
                 Password
               </Label>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm text-muted-foreground cursor-pointer hover:underline">
                 Forgot password?
               </span>
             </div>
@@ -110,6 +163,8 @@ export default function LoginForm() {
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className="pl-11 pr-11 h-12 text-base"
                 required
