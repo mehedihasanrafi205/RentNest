@@ -2,7 +2,8 @@
 
 import { cookies } from "next/headers";
 import { getMe } from "@/service/getme";
-import type { UsersResponse, PropertiesResponse, AdminStatsResponse } from "@/types";
+import type { UsersResponse, PropertiesResponse } from "@/types";
+import { revalidatePath } from "next/cache";
 
 export async function getAdminStats() {
   const cookieStore = await cookies();
@@ -14,13 +15,33 @@ export async function getAdminStats() {
   }
 
   try {
-    const res = await fetch(`${process.env.BACKEND_API_URL}/admin/stats`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-      cache: "no-store",
-    });
-    const result: AdminStatsResponse = await res.json();
-    return result.success ? result : { success: false, data: null };
+    const [usersRes, propertiesRes] = await Promise.all([
+      getAllUsers(),
+      getAllProperties(),
+    ]);
+
+    const users = usersRes.data || [];
+    const properties = propertiesRes.data || [];
+
+    const totalUsers = users.length;
+    const totalProperties = properties.length;
+
+    const totalRentals = 0;
+    const pendingRentals = 0;
+    const totalRevenue = 0;
+
+    return {
+      success: true,
+      data: {
+        totalUsers,
+        totalProperties,
+        totalRentals,
+        pendingRentals,
+        totalRevenue,
+      },
+    };
   } catch (error) {
+    console.error("Error calculating admin stats:", error);
     return { success: false, data: null };
   }
 }
@@ -54,20 +75,28 @@ export async function toggleUserBanStatus(userId: string, isBanned: boolean) {
   }
 
   try {
-    // Determine action endpoint or payload based on the backend. 
-    // Assuming a PATCH to /users/:id/ban or simply passing { isBanned } to /users/:id
-    const res = await fetch(`${process.env.BACKEND_API_URL}/users/${userId}/ban`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ isBanned }),
-    });
+    const res = await fetch(
+      `${process.env.BACKEND_API_URL}/users/${userId}/status`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isBanned }),
+      }
+    );
 
     const result = await res.json();
+
+    if (res.ok) {
+      revalidatePath("/dashboard/admin/users");
+      revalidatePath("/dashboard/admin");
+    }
+
     return result;
   } catch (error) {
+    console.error("Toggle ban status error:", error);
     return { success: false, message: "Something went wrong" };
   }
 }
@@ -81,7 +110,6 @@ export async function getAllProperties() {
   }
 
   try {
-    // Admin gets all properties, possibly ignoring status filters
     const res = await fetch(`${process.env.BACKEND_API_URL}/properties?limit=100`, {
       headers: { Authorization: `Bearer ${accessToken}` },
       cache: "no-store",
